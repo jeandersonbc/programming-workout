@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class QueryableTest {
 
@@ -44,7 +44,20 @@ class QueryableTest {
     }
 
     @Test
-    void segtreeShouldComputeSumsGivenRanges() {
-        fail("Not implemented yet");
+    void segTreeShouldComputeSumsGivenRanges() {
+        Queryable<Integer> algorithm = new SegmentTree(inputData);
+
+        final int QUERIES = 1_000_000;
+
+        for (int run = 0; run < QUERIES; run++) {
+
+            int left = gen.nextInt(inputData.length);
+            int rangeSize = gen.nextInt(inputData.length - left);
+            rangeSize = rangeSize == 0 ? 1 : rangeSize;
+            int right = left + rangeSize;
+
+            int expectedSum = right - left;
+            assertEquals(expectedSum, algorithm.query(left, right));
+        }
     }
 }
