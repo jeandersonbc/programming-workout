@@ -27,10 +27,12 @@ public class SegmentTree implements Queryable<Integer> {
         if (rightQuery <= intervalMid) {
             return query(leftQuery, rightQuery, intervalLeft, intervalMid, left(pos));
         }
-        if (leftQuery >= intervalMid) {
+        if (leftQuery > intervalMid) {
             return query(leftQuery, rightQuery, intervalMid + 1, intervalRight, right(pos));
         }
-        return -1;
+        int left = query(leftQuery, intervalMid, intervalLeft, intervalMid, left(pos));
+        int right = query(intervalMid + 1, rightQuery, intervalMid + 1, intervalRight, right(pos));
+        return left + right;
     }
 
     /**

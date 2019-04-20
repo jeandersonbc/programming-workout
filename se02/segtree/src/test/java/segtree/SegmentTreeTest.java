@@ -12,6 +12,17 @@ class SegmentTreeTest {
 
     private SegmentTree segTree;
 
+    /*
+
+    For the input [1, 1, 1, 1, 1],
+    this is the expected tree representation (for the summation problem):
+
+               5
+            3     2
+          2  1  1  1
+        1  1
+
+     */
     @BeforeEach
     void initializeData() {
         int[] input = new int[5];
@@ -64,6 +75,12 @@ class SegmentTreeTest {
      */
     @Test
     void shouldComputeAndCombinePartialSums() {
-        fail("Not implemented yet");
+
+        int expectedSum = 4;
+        assertEquals(expectedSum, segTree.query(0, 4));
+
+        expectedSum = 2;
+        assertEquals(expectedSum, segTree.query(2, 4));
+
     }
 }
