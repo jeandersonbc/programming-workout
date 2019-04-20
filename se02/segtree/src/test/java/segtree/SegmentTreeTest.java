@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class SegmentTreeTest {
+class SegmentTreeTest {
 
     private SegmentTree segTree;
 
@@ -55,5 +56,14 @@ public class SegmentTreeTest {
         assertEquals(expectedSum, segTree.query(0, 2));
         assertEquals(expectedSum, segTree.query(3, 5));
 
+    }
+
+    /**
+     * In case the query doesn't fall completely into a node, it is necessary to compute the partial sums,
+     * i.e., check both children and combine the partial sums.
+     */
+    @Test
+    void shouldComputeAndCombinePartialSums() {
+        fail("Not implemented yet");
     }
 }
