@@ -1,16 +1,16 @@
-package segtree;
+package segtree.sum;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import segtree.sum.SegmentTreeSumQuery;
 
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
-class SegmentTreeTest {
+class SegmentTreeSumQueryTest {
 
-    private SegmentTree segTree;
+    private SegmentTreeSumQuery segTree;
 
     /*
 
@@ -27,7 +27,7 @@ class SegmentTreeTest {
     void initializeData() {
         int[] input = new int[5];
         Arrays.fill(input, 1);
-        segTree = new SegmentTree(input);
+        segTree = new SegmentTreeSumQuery(input);
     }
 
     @Test

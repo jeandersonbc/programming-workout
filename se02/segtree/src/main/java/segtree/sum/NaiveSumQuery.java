@@ -1,4 +1,6 @@
-package segtree;
+package segtree.sum;
+
+import segtree.Queryable;
 
 public class NaiveSumQuery implements Queryable<Integer> {
 

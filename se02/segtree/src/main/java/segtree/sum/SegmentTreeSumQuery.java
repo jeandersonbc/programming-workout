@@ -1,13 +1,15 @@
-package segtree;
+package segtree.sum;
+
+import segtree.Queryable;
 
 import java.util.Arrays;
 
-public class SegmentTree implements Queryable<Integer> {
+public class SegmentTreeSumQuery implements Queryable<Integer> {
 
     private int leaves;
     private int[] tree;
 
-    public SegmentTree(int[] inputData) {
+    public SegmentTreeSumQuery(int[] inputData) {
         this.tree = new int[inputData.length << 2];
         this.leaves = inputData.length;
         build(0, this.leaves - 1, 0, inputData);
@@ -22,7 +24,6 @@ public class SegmentTree implements Queryable<Integer> {
         if (leftQuery == intervalLeft && rightQuery == intervalRight) {
             return this.tree[pos];
         }
-
         int intervalMid = (intervalLeft + intervalRight) >> 1;
         if (rightQuery <= intervalMid) {
             return query(leftQuery, rightQuery, intervalLeft, intervalMid, left(pos));
@@ -60,20 +61,12 @@ public class SegmentTree implements Queryable<Integer> {
 
     // Access and utility methods for the tree representation using arrays
 
-    private int parent(int i) {
-        return isEven(i) ? ((i - 2) >> 1) : i >> 1;
-    }
-
     private int right(int i) {
         return (i << 1) + 2;
     }
 
     private int left(int i) {
         return (i << 1) + 1;
-    }
-
-    private boolean isEven(int value) {
-        return (value & 1) == 0;
     }
 
 }
