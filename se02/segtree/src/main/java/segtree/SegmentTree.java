@@ -4,16 +4,33 @@ import java.util.Arrays;
 
 public class SegmentTree implements Queryable<Integer> {
 
+    private int leaves;
     private int[] tree;
 
     public SegmentTree(int[] inputData) {
         this.tree = new int[inputData.length << 2];
-        build(0, inputData.length - 1, 0, inputData);
+        this.leaves = inputData.length;
+        build(0, this.leaves - 1, 0, inputData);
     }
 
     @Override
     public Integer query(int i, int j) {
-        throw new RuntimeException("Not implemented yet");
+        return query(i, j - 1, 0, this.leaves - 1, 0);
+    }
+
+    private Integer query(int leftQuery, int rightQuery, int intervalLeft, int intervalRight, int pos) {
+        if (leftQuery == intervalLeft && rightQuery == intervalRight) {
+            return this.tree[pos];
+        }
+
+        int intervalMid = (intervalLeft + intervalRight) >> 1;
+        if (rightQuery <= intervalMid) {
+            return query(leftQuery, rightQuery, intervalLeft, intervalMid, left(pos));
+        }
+        if (leftQuery >= intervalMid) {
+            return query(leftQuery, rightQuery, intervalMid + 1, intervalRight, right(pos));
+        }
+        return -1;
     }
 
     /**
