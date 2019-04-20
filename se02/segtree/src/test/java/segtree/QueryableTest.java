@@ -17,6 +17,9 @@ class QueryableTest {
     @BeforeAll
     static void setupGenerator() {
         gen = new Random(1234);
+
+        throw new RuntimeException("You need to read 'dataset1.txt' and load" +
+                "it to test the implementation with differential testing");
     }
 
     @BeforeEach
