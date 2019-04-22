@@ -4,12 +4,12 @@ import segtree.Queryable;
 
 import java.util.Arrays;
 
-public class SegmentTreeSumQuery implements Queryable<Integer> {
+public class ArraySumSegmentTree implements Queryable<Integer> {
 
     private int leaves;
     private int[] tree;
 
-    public SegmentTreeSumQuery(int[] inputData) {
+    public ArraySumSegmentTree(int[] inputData) {
         this.tree = new int[inputData.length << 2];
         this.leaves = inputData.length;
         build(0, this.leaves - 1, 0, inputData);

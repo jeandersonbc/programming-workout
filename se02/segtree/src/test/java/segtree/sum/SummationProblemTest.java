@@ -50,8 +50,8 @@ class SummationProblemTest {
     }
 
     @Test
-    void segTreeShouldComputeSumsGivenRanges() {
-        Queryable<Integer> algorithm = new SegmentTreeSumQuery(inputData);
+    void treeSumlShouldComputeSumsGivenRanges() {
+        Queryable<Integer> algorithm = new TreeSumSegTree(inputData);
 
         final int QUERIES = 1_000_000;
 
@@ -68,9 +68,28 @@ class SummationProblemTest {
     }
 
     @Test
-    void bothShouldProduceSameResultWithRandomData() {
+    void arraySumShouldComputeSumsGivenRanges() {
+        Queryable<Integer> algorithm = new ArraySumSegmentTree(inputData);
+
+        final int QUERIES = 1_000_000;
+
+        for (int run = 0; run < QUERIES; run++) {
+
+            int left = gen.nextInt(inputData.length);
+            int rangeSize = gen.nextInt(inputData.length - left);
+            rangeSize = rangeSize == 0 ? 1 : rangeSize;
+            int right = left + rangeSize;
+
+            int expectedSum = right - left;
+            assertEquals(expectedSum, algorithm.query(left, right));
+        }
+    }
+
+    @Test
+    void shouldProduceSameResultWithRandomData() {
         Queryable<Integer> naive = new NaiveSumQuery(inputRandomData);
-        Queryable<Integer> segTree = new SegmentTreeSumQuery(inputRandomData);
+        Queryable<Integer> arraySum = new ArraySumSegmentTree(inputRandomData);
+        Queryable<Integer> segTree = new TreeSumSegTree(inputRandomData);
 
         final int QUERIES = 1_000_000;
 
@@ -81,7 +100,9 @@ class SummationProblemTest {
             rangeSize = rangeSize == 0 ? 1 : rangeSize;
             int right = left + rangeSize;
 
-            assertEquals(naive.query(left, right), segTree.query(left, right));
+            int expectedSum = naive.query(left, right);
+            assertEquals(expectedSum, arraySum.query(left, right));
+            assertEquals(expectedSum, segTree.query(left, right));
         }
 
     }

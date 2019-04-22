@@ -2,15 +2,14 @@ package segtree.sum;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import segtree.sum.SegmentTreeSumQuery;
 
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class SegmentTreeSumQueryTest {
+class ArraySumSegmentTreeTest {
 
-    private SegmentTreeSumQuery segTree;
+    private ArraySumSegmentTree segTree;
 
     /*
 
@@ -27,7 +26,7 @@ class SegmentTreeSumQueryTest {
     void initializeData() {
         int[] input = new int[5];
         Arrays.fill(input, 1);
-        segTree = new SegmentTreeSumQuery(input);
+        segTree = new ArraySumSegmentTree(input);
     }
 
     @Test
