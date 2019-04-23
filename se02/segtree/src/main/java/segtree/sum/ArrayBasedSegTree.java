@@ -5,12 +5,12 @@ import segtree.Representable;
 
 import java.util.Arrays;
 
-public class SumArraySegmentTree implements Queryable<Integer>, Representable<int[]> {
+public class ArrayBasedSegTree implements Queryable<Integer>, Representable<int[]> {
 
     private int leaves;
     private int[] tree;
 
-    public SumArraySegmentTree(int[] inputData) {
+    public ArrayBasedSegTree(int[] inputData) {
         this.tree = new int[inputData.length << 2];
         this.leaves = inputData.length;
         build(0, this.leaves - 1, 0, inputData);

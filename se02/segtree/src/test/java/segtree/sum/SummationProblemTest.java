@@ -33,7 +33,7 @@ class SummationProblemTest {
 
     @Test
     void naiveShouldComputeSumsGivenRanges() {
-        Queryable<Integer> algorithm = new NaiveSumQuery(inputData);
+        Queryable<Integer> algorithm = new NaiveSolution(inputData);
 
         final int QUERIES = 1_000_000;
 
@@ -51,7 +51,7 @@ class SummationProblemTest {
 
     @Test
     void treeSumlShouldComputeSumsGivenRanges() {
-        Queryable<Integer> algorithm = new SumNodeSegmentTree(inputData);
+        Queryable<Integer> algorithm = new NodeBasedSegTree(inputData);
 
         final int QUERIES = 1_000_000;
 
@@ -69,7 +69,7 @@ class SummationProblemTest {
 
     @Test
     void arraySumShouldComputeSumsGivenRanges() {
-        Queryable<Integer> algorithm = new SumArraySegmentTree(inputData);
+        Queryable<Integer> algorithm = new ArrayBasedSegTree(inputData);
 
         final int QUERIES = 1_000_000;
 
@@ -87,9 +87,9 @@ class SummationProblemTest {
 
     @Test
     void shouldProduceSameResultWithRandomData() {
-        Queryable<Integer> naive = new NaiveSumQuery(inputRandomData);
-        Queryable<Integer> arraySum = new SumArraySegmentTree(inputRandomData);
-        Queryable<Integer> segTree = new SumNodeSegmentTree(inputRandomData);
+        Queryable<Integer> naive = new NaiveSolution(inputRandomData);
+        Queryable<Integer> arraySum = new ArrayBasedSegTree(inputRandomData);
+        Queryable<Integer> segTree = new NodeBasedSegTree(inputRandomData);
 
         final int QUERIES = 1_000_000;
 

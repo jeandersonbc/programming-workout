@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SegmentTreeTest {
 
-    private SumArraySegmentTree arraySegTree;
-    private SumNodeSegmentTree nodeSegTree;
+    private ArrayBasedSegTree arraySegTree;
+    private NodeBasedSegTree nodeSegTree;
 
     @BeforeEach
     void initializeData() {
@@ -29,8 +29,8 @@ class SegmentTreeTest {
         int[] input = new int[5];
         Arrays.fill(input, 1);
 
-        arraySegTree = new SumArraySegmentTree(input);
-        nodeSegTree = new SumNodeSegmentTree(input);
+        arraySegTree = new ArrayBasedSegTree(input);
+        nodeSegTree = new NodeBasedSegTree(input);
     }
 
     @Test

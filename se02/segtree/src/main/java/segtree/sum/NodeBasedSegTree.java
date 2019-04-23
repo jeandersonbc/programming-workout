@@ -3,7 +3,7 @@ package segtree.sum;
 import segtree.Queryable;
 import segtree.Representable;
 
-public class SumNodeSegmentTree implements Queryable<Integer>, Representable<int[]> {
+public class NodeBasedSegTree implements Queryable<Integer>, Representable<int[]> {
 
     private final Node root;
 
@@ -22,7 +22,7 @@ public class SumNodeSegmentTree implements Queryable<Integer>, Representable<int
 
     }
 
-    public SumNodeSegmentTree(int[] inputData) {
+    public NodeBasedSegTree(int[] inputData) {
         this.root = new Node(0, inputData.length - 1);
         build(this.root, inputData);
     }

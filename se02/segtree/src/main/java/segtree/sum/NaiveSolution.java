@@ -2,11 +2,11 @@ package segtree.sum;
 
 import segtree.Queryable;
 
-public class NaiveSumQuery implements Queryable<Integer> {
+public class NaiveSolution implements Queryable<Integer> {
 
     private final int[] values;
 
-    public NaiveSumQuery(int[] values) {
+    public NaiveSolution(int[] values) {
         this.values = values;
     }
 
