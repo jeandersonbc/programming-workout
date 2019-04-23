@@ -1,15 +1,16 @@
 package segtree.sum;
 
 import segtree.Queryable;
+import segtree.Representable;
 
 import java.util.Arrays;
 
-public class ArraySumSegmentTree implements Queryable<Integer> {
+public class SumArraySegmentTree implements Queryable<Integer>, Representable<int[]> {
 
     private int leaves;
     private int[] tree;
 
-    public ArraySumSegmentTree(int[] inputData) {
+    public SumArraySegmentTree(int[] inputData) {
         this.tree = new int[inputData.length << 2];
         this.leaves = inputData.length;
         build(0, this.leaves - 1, 0, inputData);
@@ -55,6 +56,7 @@ public class ArraySumSegmentTree implements Queryable<Integer> {
         }
     }
 
+    @Override
     public int[] internalRepresentation() {
         return Arrays.copyOf(this.tree, this.tree.length);
     }
