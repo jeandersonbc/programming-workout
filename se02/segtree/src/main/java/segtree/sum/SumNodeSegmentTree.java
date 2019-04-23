@@ -67,14 +67,14 @@ public class SumNodeSegmentTree implements Queryable<Integer>, Representable<int
     }
 
     private Integer query(int i, int j, Node node) {
-        if (i == j) {
+        if (i == node.rangeLeft && j == node.rangeRight) {
             return node.data;
         }
         int mid = (node.rangeLeft + node.rangeRight) >> 1;
         if (j <= mid) {
-            return query(i, mid, node.left);
+            return query(i, j, node.left);
         } else if (i > mid) {
-            return query(mid + 1, j, node.right);
+            return query(i, j, node.right);
         }
         int left = query(i, mid, node.left);
         int right = query(mid + 1, j, node.right);
