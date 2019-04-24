@@ -28,4 +28,8 @@ test {
     useJUnitPlatform {
         includeEngines 'junit-jupiter'
     }
+    systemProperties = [
+       'junit.jupiter.execution.parallel.enabled': 'true',
+       'junit.jupiter.execution.parallel.mode.default': 'concurrent'
+   ]
 }
