@@ -1,61 +1,32 @@
 package segtree.sum;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import segtree.Queryable;
 import segtree.Representable;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SegmentTreeTest {
 
-    private ArrayBasedSegTree arraySegTree;
-    private NodeBasedSegTree nodeSegTree;
-
-    @BeforeEach
-    void initializeData() {
-        /*
-
-        This is the expected tree representation for the input [1, 1, 1, 1, 1] (for the summation problem):
-
-                   5
-                3     2
-              2  1  1  1
-            1  1
-
-         */
+    static Stream<Representable<int[]>> representableFactory() {
         int[] input = new int[5];
         Arrays.fill(input, 1);
-
-        arraySegTree = new ArrayBasedSegTree(input);
-        nodeSegTree = new NodeBasedSegTree(input);
+        return Stream.of(new ArrayBasedSegTree(input), new NodeBasedSegTree(input));
     }
 
-    @Test
-    void shouldBuildInternalRepresentation1() {
-        Representable<int[]> representable = arraySegTree;
-
-
-        int[] expectedInternalRepr = {
-                5,
-                3, 2,
-                2, 1, 1, 1,
-                1, 1
-        };
-
-        int[] actualRepr = representable.internalRepresentation();
-        for (int i = 0; i < expectedInternalRepr.length; i++) {
-            assertEquals(expectedInternalRepr[i], actualRepr[i],
-                    String.format("Unexpected i-th (%d) element. Bad split?", i));
-        }
+    static Stream<Queryable<Integer>> queryableFactory() {
+        int[] input = new int[5];
+        Arrays.fill(input, 1);
+        return Stream.of(new ArrayBasedSegTree(input), new NodeBasedSegTree(input));
     }
 
-    @Test
-    void shouldBuildInternalRepresentation2() {
-        Representable<int[]> representable = nodeSegTree;
-
+    @ParameterizedTest
+    @MethodSource("representableFactory")
+    void shouldBuildInternalRepresentation(Representable<int[]> representable) {
 
         int[] expectedInternalRepr = {
                 5,
@@ -74,11 +45,9 @@ class SegmentTreeTest {
     /**
      * A "matching interval" occurs when the given interval is exactly covered by a given node.
      */
-    @Test
-    void shouldBeAbleToQueryWithMatchingInterval1() {
-
-        Queryable<Integer> queryable = arraySegTree;
-
+    @ParameterizedTest
+    @MethodSource("queryableFactory")
+    void shouldBeAbleToQueryWithMatchingInterval(Queryable<Integer> queryable) {
         // Case 1: root node
         int expectedSum = 5;
         assertEquals(expectedSum, queryable.query(0, 5));
@@ -99,49 +68,9 @@ class SegmentTreeTest {
      * In case the query doesn't fall completely into a node, it is necessary to compute the partial sums,
      * i.e., check both children and combine the partial sums.
      */
-    @Test
-    void shouldComputeAndCombinePartialSums1() {
-        Queryable<Integer> queryable = arraySegTree;
-
-        int expectedSum = 4;
-        assertEquals(expectedSum, queryable.query(0, 4));
-
-        expectedSum = 2;
-        assertEquals(expectedSum, queryable.query(2, 4));
-
-    }
-
-    /**
-     * A "matching interval" occurs when the given interval is exactly covered by a given node.
-     */
-    @Test
-    void shouldBeAbleToQueryWithMatchingInterval2() {
-
-        Queryable<Integer> queryable = nodeSegTree;
-
-        // Case 1: root node
-        int expectedSum = 5;
-        assertEquals(expectedSum, queryable.query(0, 5));
-
-        // Case 2: leaf node
-        expectedSum = 1;
-        assertEquals(expectedSum, queryable.query(0, 1));
-        assertEquals(expectedSum, queryable.query(4, 5));
-
-        // Case 3: internal node
-        expectedSum = 2;
-        assertEquals(expectedSum, queryable.query(0, 2));
-        assertEquals(expectedSum, queryable.query(3, 5));
-
-    }
-
-    /**
-     * In case the query doesn't fall completely into a node, it is necessary to compute the partial sums,
-     * i.e., check both children and combine the partial sums.
-     */
-    @Test
-    void shouldComputeAndCombinePartialSums2() {
-        Queryable<Integer> queryable = nodeSegTree;
+    @ParameterizedTest
+    @MethodSource("queryableFactory")
+    void shouldComputeAndCombinePartialSums(Queryable<Integer> queryable) {
 
         int expectedSum = 4;
         assertEquals(expectedSum, queryable.query(0, 4));

@@ -1,121 +1,75 @@
 package segtree.sum;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import segtree.Queryable;
 
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class SummationProblemTest {
 
-    private static Random gen;
-    private int[] inputData;
-    private int[] inputRandomData;
+    private static final Random GEN = new Random(1234);
 
-    @BeforeAll
-    static void setupGenerator() {
-        gen = new Random(1234);
+    static Stream<Arguments> paramFactory() throws IOException {
+        int[] simpleData = new int[1_000_000];
+        Arrays.fill(simpleData, 1);
+        int[] randomData = loadRandomNumbers();
+
+        Queryable<Integer> naiveSimple = new NaiveSolution(simpleData);
+        Queryable<Integer> naiveRandom = new NaiveSolution(randomData);
+        Queryable<Integer> nodeBasedSimple = new NodeBasedSegTree(simpleData);
+        Queryable<Integer> nodeBasedRandom = new NodeBasedSegTree(randomData);
+        Queryable<Integer> arrayBasedSimple = new ArrayBasedSegTree(simpleData);
+        Queryable<Integer> arrayBasedRandom = new ArrayBasedSegTree(randomData);
+
+        return Stream.of(
+                arguments(naiveSimple, nodeBasedSimple, simpleData, 1_000_000),
+                arguments(naiveSimple, arrayBasedSimple, simpleData, 1_000_000),
+                arguments(naiveRandom, nodeBasedRandom, randomData, 100_000),
+                arguments(naiveRandom, arrayBasedRandom, randomData, 100_000)
+        );
     }
 
-    @BeforeEach
-    void initializeTestData() throws IOException {
-        inputData = new int[1_000_000];
-        Arrays.fill(inputData, 1);
-        inputRandomData = loadRandomNumbers();
-    }
+    @ParameterizedTest
+    @MethodSource("paramFactory")
+    void shouldProduceSameResultWithRandomData(Queryable<Integer> reference,
+                                               Queryable<Integer> underTest,
+                                               int[] data,
+                                               int queries) {
 
-    @Test
-    void naiveShouldComputeSumsGivenRanges() {
-        Queryable<Integer> algorithm = new NaiveSolution(inputData);
+        for (int run = 0; run < queries; run++) {
 
-        final int QUERIES = 1_000_000;
-
-        for (int run = 0; run < QUERIES; run++) {
-
-            int left = gen.nextInt(inputData.length);
-            int rangeSize = gen.nextInt(inputData.length - left);
+            int left = GEN.nextInt(data.length);
+            int rangeSize = GEN.nextInt(data.length - left);
             rangeSize = rangeSize == 0 ? 1 : rangeSize;
             int right = left + rangeSize;
 
-            int expectedSum = right - left;
-            assertEquals(expectedSum, algorithm.query(left, right));
-        }
-    }
-
-    @Test
-    void treeSumlShouldComputeSumsGivenRanges() {
-        Queryable<Integer> algorithm = new NodeBasedSegTree(inputData);
-
-        final int QUERIES = 1_000_000;
-
-        for (int run = 0; run < QUERIES; run++) {
-
-            int left = gen.nextInt(inputData.length);
-            int rangeSize = gen.nextInt(inputData.length - left);
-            rangeSize = rangeSize == 0 ? 1 : rangeSize;
-            int right = left + rangeSize;
-
-            int expectedSum = right - left;
-            assertEquals(expectedSum, algorithm.query(left, right));
-        }
-    }
-
-    @Test
-    void arraySumShouldComputeSumsGivenRanges() {
-        Queryable<Integer> algorithm = new ArrayBasedSegTree(inputData);
-
-        final int QUERIES = 1_000_000;
-
-        for (int run = 0; run < QUERIES; run++) {
-
-            int left = gen.nextInt(inputData.length);
-            int rangeSize = gen.nextInt(inputData.length - left);
-            rangeSize = rangeSize == 0 ? 1 : rangeSize;
-            int right = left + rangeSize;
-
-            int expectedSum = right - left;
-            assertEquals(expectedSum, algorithm.query(left, right));
-        }
-    }
-
-    @Test
-    void shouldProduceSameResultWithRandomData() {
-        Queryable<Integer> naive = new NaiveSolution(inputRandomData);
-        Queryable<Integer> arraySum = new ArrayBasedSegTree(inputRandomData);
-        Queryable<Integer> segTree = new NodeBasedSegTree(inputRandomData);
-
-        final int QUERIES = 1_000_000;
-
-        for (int run = 0; run < QUERIES; run++) {
-
-            int left = gen.nextInt(inputRandomData.length);
-            int rangeSize = gen.nextInt(inputRandomData.length - left);
-            rangeSize = rangeSize == 0 ? 1 : rangeSize;
-            int right = left + rangeSize;
-
-            int expectedSum = naive.query(left, right);
-            assertEquals(expectedSum, arraySum.query(left, right));
-            assertEquals(expectedSum, segTree.query(left, right));
+            int expectedSum = reference.query(left, right);
+            assertEquals(expectedSum, underTest.query(left, right));
         }
 
     }
 
-    private int[] loadRandomNumbers() throws IOException {
-        URL dataLocation = getClass().getClassLoader().getResource("sum/dataset1.txt");
+    private static int[] loadRandomNumbers() throws IOException {
+        URL dataLocation = SummationProblemTest.class.getClassLoader().getResource("sum/dataset1.txt");
         if (dataLocation == null)
             throw new RuntimeException("dataset1.txt could not be found");
 
-        final int DATASET1_SIZE = 100_000;
+        final int ROWS = 100_000;
         Scanner in = new Scanner(Path.of(dataLocation.getPath()), StandardCharsets.UTF_8);
-        int[] temp = new int[DATASET1_SIZE];
-        for (int i = 0; i < DATASET1_SIZE; i++) {
+        int[] temp = new int[ROWS];
+        for (int i = 0; i < ROWS; i++) {
             temp[i] = Integer.parseInt(in.nextLine());
         }
         return temp;
